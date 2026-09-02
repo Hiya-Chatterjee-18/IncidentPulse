@@ -1,42 +1,86 @@
-# ⚡ Smart Incident Management & Analytics Platform
+# 🚨 Smart Incident Management & Analytics Platform
 
 ![Java 21](https://img.shields.io/badge/Java-21-orange)
-![Spring Boot](https://img.shields.io/badge/Spring_Boot-3.2.5-green)
-![PostgreSQL](https://img.shields.io/badge/Operational_DB-PostgreSQL-336791)
-![MongoDB](https://img.shields.io/badge/Document_DB-MongoDB-brightgreen)
-![Redis](https://img.shields.io/badge/Cache-Redis_Sub--15ms-red)
-![Apache Kafka](https://img.shields.io/badge/Event_Streaming-Apache_Kafka-black)
-![RabbitMQ](https://img.shields.io/badge/Async_Queue-RabbitMQ-FF6600)
-![PySpark](https://img.shields.io/badge/ETL_Pipeline-PySpark-E25A1C)
-![Airflow](https://img.shields.io/badge/Orchestration-Apache_Airflow-017CEE)
-![Docker](https://img.shields.io/badge/DevOps-Docker_Compose-2496ED)
-![React](https://img.shields.io/badge/Frontend-React_18-61DAFB)
-![Status](https://img.shields.io/badge/Rating-9.7%2F10_Enterprise-success)
+![Spring Boot](https://img.shields.io/badge/Spring%20Boot-3-green)
+![PostgreSQL](https://img.shields.io/badge/Database-PostgreSQL-blue)
+![MongoDB](https://img.shields.io/badge/Database-MongoDB-brightgreen)
+![Redis](https://img.shields.io/badge/Cache-Redis-red)
+![Apache Kafka](https://img.shields.io/badge/Event%20Streaming-Apache%20Kafka-black)
+![RabbitMQ](https://img.shields.io/badge/Async%20Messaging-RabbitMQ-orange)
+![PySpark](https://img.shields.io/badge/ETL-PySpark-red)
+![Apache Airflow](https://img.shields.io/badge/Orchestration-Apache%20Airflow-blue)
+![Docker](https://img.shields.io/badge/DevOps-Docker-blue)
+![React](https://img.shields.io/badge/Frontend-React-61DAFB)
 
-An enterprise-grade outage tracking, real-time event streaming, PySpark ETL, and SLA analytics platform built with **Java 21, Spring Boot 3, PostgreSQL, MongoDB, Redis, Apache Kafka, RabbitMQ, PySpark, Apache Airflow, Docker Compose, and React**.
+> An enterprise-grade incident management and analytics platform combining **Spring Boot microservices, event-driven architecture, real-time data streaming, PySpark ETL, Airflow orchestration, SLA management, and analytics**.
 
 ---
 
-## 🏗️ 1. High-Level Enterprise Architecture & Technology Stack
+## 🎯 Overview
+
+Smart Incident Management & Analytics Platform is designed to manage the complete incident lifecycle:
+
+**Report → Prioritize → Detect Duplicates → Assign → Track SLA → Resolve → Analyze**
+
+The platform combines transactional backend services with an event-driven data pipeline to transform operational incident data into actionable analytics.
+
+---
+
+## ✨ Key Features
+
+- 🔐 JWT-based authentication and role-based access control
+- 🚨 Intelligent incident priority classification
+- 🔍 Duplicate incident detection using similarity analysis
+- 👥 Role-based incident assignment and management
+- ⏱️ SLA tracking with priority-based response and resolution targets
+- 💬 Incident comments, resolution and audit history
+- 📚 Knowledge base for incident resolution
+- ⚡ Kafka-based incident event streaming
+- 📨 RabbitMQ asynchronous event processing
+- 🧠 Redis-based analytics caching
+- 📊 Analytics dashboards and operational metrics
+- 🔄 PySpark-based ETL and data transformation
+- 🛡️ Data quality validation and exception handling
+- 📅 Apache Airflow workflow orchestration
+- 🐳 Docker Compose-based development environment
+- 📖 Swagger/OpenAPI API documentation
+
+---
+
+## 🏗️ Architecture
 
 ```mermaid
-graph TD
-    UI[React 18 + Vite SPA Frontend] -->|REST API / JWT Auth| API[Java 21 + Spring Boot 3 Microservice]
-    
-    subgraph Core Persistence & Security
-        API -->|Relational Data| PG[(PostgreSQL Operational DB)]
-        API -->|Unstructured RCA / KB| MONGO[(MongoDB Document Store)]
-        API -->|Sub-15ms Analytics| REDIS[(Redis Cache Store)]
-    end
-    
-    subgraph Event-Driven Messaging Layer
-        API -->|Task Queues: Notifications & SLA Alerts| RMQ[RabbitMQ Task Queue]
-        API -->|Lifecycle Stream: INCIDENT_CREATED, RESOLVED| KAFKA[Apache Kafka Broker]
-    end
-    
-    subgraph Data Engineering & Analytics Pipeline
-        KAFKA -->|Real-Time Event Ingestion| SPARK[PySpark Distributed ETL Engine]
-        SPARK -->|Schema Validation & DLQ| DLQ[Dead Letter Queue / Error Log]
-        SPARK -->|Partitioned Parquet Data Lake| S3[(AWS S3 / Parquet Data Lake)]
-        AIRFLOW[Apache Airflow DAG] -->|Daily Orchestration & KPI Recalculation| SPARK
-    end
+flowchart LR
+
+    UI[React Frontend]
+
+    API[Java 21<br/>Spring Boot]
+
+    AUTH[JWT Security]
+
+    DB1[(PostgreSQL)]
+    DB2[(MongoDB)]
+    CACHE[(Redis)]
+
+    KAFKA[Apache Kafka]
+    RMQ[RabbitMQ]
+
+    SPARK[PySpark ETL]
+    AIRFLOW[Apache Airflow]
+
+    DATA[(Analytics Data)]
+
+    UI --> API
+    API --> AUTH
+    API --> DB1
+    API --> DB2
+    API --> CACHE
+
+    API --> KAFKA
+    API --> RMQ
+
+    KAFKA --> SPARK
+    AIRFLOW --> SPARK
+    SPARK --> DATA
+
+    DATA --> API
