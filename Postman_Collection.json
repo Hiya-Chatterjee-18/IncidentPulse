@@ -1,0 +1,80 @@
+{
+  "info": {
+    "name": "Smart Incident Management API Collection",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "item": [
+    {
+      "name": "Authentication - Login",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"email\": \"alex.morgan@company.com\",\n  \"password\": \"password123\"\n}"
+        },
+        "url": {
+          "raw": "http://localhost:8080/api/v1/auth/login",
+          "protocol": "http",
+          "host": ["localhost"],
+          "port": "8080",
+          "path": ["api", "v1", "auth", "login"]
+        }
+      }
+    },
+    {
+      "name": "Incidents - Get All",
+      "request": {
+        "method": "GET",
+        "url": {
+          "raw": "http://localhost:8080/api/v1/incidents",
+          "protocol": "http",
+          "host": ["localhost"],
+          "port": "8080",
+          "path": ["api", "v1", "incidents"]
+        }
+      }
+    },
+    {
+      "name": "Incidents - Create New",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"title\": \"Production Payment Gateway 500 Outage\",\n  \"category\": \"Payment Gateway\",\n  \"description\": \"Payment transactions failing across checkout service\",\n  \"priority\": \"CRITICAL\",\n  \"impact\": \"Organization\",\n  \"urgency\": \"Critical\"\n}"
+        },
+        "url": {
+          "raw": "http://localhost:8080/api/v1/incidents",
+          "protocol": "http",
+          "host": ["localhost"],
+          "port": "8080",
+          "path": ["api", "v1", "incidents"]
+        }
+      }
+    },
+    {
+      "name": "Analytics - Get Metrics",
+      "request": {
+        "method": "GET",
+        "url": {
+          "raw": "http://localhost:8080/api/v1/analytics/metrics",
+          "protocol": "http",
+          "host": ["localhost"],
+          "port": "8080",
+          "path": ["api", "v1", "analytics", "metrics"]
+        }
+      }
+    }
+  ]
+}
