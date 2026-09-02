@@ -1,0 +1,54 @@
+server:
+  port: 8080
+
+spring:
+  application:
+    name: incident-system-backend
+
+  # Operational Relational Database (PostgreSQL)
+  datasource:
+    url: jdbc:postgresql://${POSTGRES_HOST:localhost}:5432/incident_db
+    username: ${POSTGRES_USER:postgres}
+    password: ${POSTGRES_PASSWORD:postgres}
+    driver-class-name: org.postgresql.Driver
+  jpa:
+    hibernate:
+      ddl-auto: update
+    show-sql: true
+    properties:
+      hibernate:
+        format_sql: true
+
+  # Document Database (MongoDB for Knowledge Base & Audit Logs)
+  data:
+    mongodb:
+      uri: mongodb://${MONGO_HOST:localhost}:27017/incident_docs_db
+
+    # Low-Latency Cache (Redis)
+    redis:
+      host: ${REDIS_HOST:localhost}
+      port: 6379
+
+  # Event Streaming (Apache Kafka)
+  kafka:
+    bootstrap-servers: ${KAFKA_HOST:localhost}:9092
+    producer:
+      key-serializer: org.apache.kafka.common.serialization.StringSerializer
+      value-serializer: org.springframework.kafka.support.serializer.JsonSerializer
+    consumer:
+      group-id: incident-analytics-group
+      auto-offset-reset: earliest
+      key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+      value-deserializer: org.springframework.kafka.support.serializer.JsonDeserializer
+
+  # Asynchronous Task Messaging (RabbitMQ)
+  rabbitmq:
+    host: ${RABBITMQ_HOST:localhost}
+    port: 5672
+
+# OpenAPI / Swagger Config
+springdoc:
+  api-docs:
+    path: /v3/api-docs
+  swagger-ui:
+    path: /swagger-ui.html
