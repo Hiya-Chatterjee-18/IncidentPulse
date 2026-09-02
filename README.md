@@ -1,86 +1,86 @@
-# 🚨 Smart Incident Management & Analytics Platform
+## 🏗️ System Architecture
 
-![Java 21](https://img.shields.io/badge/Java-21-orange)
-![Spring Boot](https://img.shields.io/badge/Spring%20Boot-3-green)
-![PostgreSQL](https://img.shields.io/badge/Database-PostgreSQL-blue)
-![MongoDB](https://img.shields.io/badge/Database-MongoDB-brightgreen)
-![Redis](https://img.shields.io/badge/Cache-Redis-red)
-![Apache Kafka](https://img.shields.io/badge/Event%20Streaming-Apache%20Kafka-black)
-![RabbitMQ](https://img.shields.io/badge/Async%20Messaging-RabbitMQ-orange)
-![PySpark](https://img.shields.io/badge/ETL-PySpark-red)
-![Apache Airflow](https://img.shields.io/badge/Orchestration-Apache%20Airflow-blue)
-![Docker](https://img.shields.io/badge/DevOps-Docker-blue)
-![React](https://img.shields.io/badge/Frontend-React-61DAFB)
-
-> An enterprise-grade incident management and analytics platform combining **Spring Boot microservices, event-driven architecture, real-time data streaming, PySpark ETL, Airflow orchestration, SLA management, and analytics**.
-
----
-
-## 🎯 Overview
-
-Smart Incident Management & Analytics Platform is designed to manage the complete incident lifecycle:
-
-**Report → Prioritize → Detect Duplicates → Assign → Track SLA → Resolve → Analyze**
-
-The platform combines transactional backend services with an event-driven data pipeline to transform operational incident data into actionable analytics.
-
----
-
-## ✨ Key Features
-
-- 🔐 JWT-based authentication and role-based access control
-- 🚨 Intelligent incident priority classification
-- 🔍 Duplicate incident detection using similarity analysis
-- 👥 Role-based incident assignment and management
-- ⏱️ SLA tracking with priority-based response and resolution targets
-- 💬 Incident comments, resolution and audit history
-- 📚 Knowledge base for incident resolution
-- ⚡ Kafka-based incident event streaming
-- 📨 RabbitMQ asynchronous event processing
-- 🧠 Redis-based analytics caching
-- 📊 Analytics dashboards and operational metrics
-- 🔄 PySpark-based ETL and data transformation
-- 🛡️ Data quality validation and exception handling
-- 📅 Apache Airflow workflow orchestration
-- 🐳 Docker Compose-based development environment
-- 📖 Swagger/OpenAPI API documentation
-
----
-
-## 🏗️ Architecture
+The platform follows a **layered, event-driven architecture** that separates transactional incident management from asynchronous processing and analytics.
 
 ```mermaid
-flowchart LR
+flowchart TB
 
-    UI[React Frontend]
+    %% ================= USER LAYER =================
+    subgraph CLIENT["Presentation Layer"]
+        EMP["Employee"]
+        AGENT["Support Specialist"]
+        ADMIN["IT Manager / Admin"]
+        UI["React 18 + Vite"]
+    end
 
-    API[Java 21<br/>Spring Boot]
+    EMP --> UI
+    AGENT --> UI
+    ADMIN --> UI
 
-    AUTH[JWT Security]
+    %% ================= API LAYER =================
+    subgraph API["Application Layer — Java 21 / Spring Boot 3"]
+        AUTH["Authentication & Authorization<br/>JWT + BCrypt"]
+        IC["Incident Controller"]
+        AC["Analytics Controller"]
+        KB["Knowledge Base Controller"]
+        AMC["Admin Controller"]
 
-    DB1[(PostgreSQL)]
-    DB2[(MongoDB)]
-    CACHE[(Redis)]
+        IS["Incident Service"]
+        APS["Intelligent Priority Engine"]
+        DC["Duplicate Classifier"]
+        AS["Analytics Service"]
+        KBS["Knowledge Base Service"]
+    end
 
-    KAFKA[Apache Kafka]
-    RMQ[RabbitMQ]
+    UI --> AUTH
+    UI --> IC
+    UI --> AC
+    UI --> KB
+    UI --> AMC
 
-    SPARK[PySpark ETL]
-    AIRFLOW[Apache Airflow]
+    IC --> IS
+    IS --> APS
+    IS --> DC
+    AC --> AS
+    KB --> KBS
 
-    DATA[(Analytics Data)]
+    %% ================= DATA LAYER =================
+    subgraph DATA["Operational Data Layer"]
+        PG[("PostgreSQL<br/>Transactional Data")]
+        MDB[("MongoDB<br/>Incident Documents")]
+        REDIS[("Redis<br/>Caching")]
+    end
 
-    UI --> API
-    API --> AUTH
-    API --> DB1
-    API --> DB2
-    API --> CACHE
+    IS --> PG
+    IS --> MDB
+    AS --> REDIS
+    KBS --> MDB
 
-    API --> KAFKA
-    API --> RMQ
+    %% ================= EVENT LAYER =================
+    subgraph EVENTS["Event-Driven Messaging Layer"]
+        KAFKA["Apache Kafka<br/>Incident Lifecycle Events"]
+        RABBIT["RabbitMQ<br/>Async Processing"]
+    end
+
+    IS --> KAFKA
+    IS --> RABBIT
+
+    %% ================= DATA ENGINEERING =================
+    subgraph DE["Data Engineering Layer"]
+        SPARK["PySpark<br/>ETL & Transformations"]
+        DQ["Data Quality Validation"]
+        DLQ["DLQ / Exception Handling"]
+        AIRFLOW["Apache Airflow<br/>Workflow Orchestration"]
+    end
 
     KAFKA --> SPARK
     AIRFLOW --> SPARK
-    SPARK --> DATA
+    SPARK --> DQ
+    DQ -->|Valid Data| ANALYTICS[("Analytics Dataset")]
+    DQ -->|Invalid Data| DLQ
 
-    DATA --> API
+    %% ================= ANALYTICS =================
+    AS --> ANALYTICS
+
+    ANALYTICS --> AC
+    AC --> UI
