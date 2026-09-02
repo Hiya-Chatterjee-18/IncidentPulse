@@ -1,0 +1,6 @@
+event_id,incident_id,event_type,category,priority,reporter_dept,response_time_min,resolution_time_min,sla_breached,timestamp
+EVT-1001,INC-5001,INCIDENT_RESOLVED,Database,CRITICAL,Engineering,15,120,false,2026-09-03T00:00:00Z
+EVT-1002,INC-5002,INCIDENT_RESOLVED,Payment Gateway,HIGH,Finance,45,320,true,2026-09-03T00:05:00Z
+EVT-1003,INC-5003,INCIDENT_RESOLVED,Database,CRITICAL,Engineering,10,90,false,2026-09-03T00:10:00Z
+EVT-1004,INC-5004,INCIDENT_RESOLVED,Cloud Infrastructure,MEDIUM,Operations,60,600,false,2026-09-03T00:15:00Z
+EVT-1005,INC-5005,INCIDENT_RESOLVED,Authentication,HIGH,Customer Success,30,410,true,2026-09-03T00:20:00Z
