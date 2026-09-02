@@ -1,0 +1,11 @@
+{
+  "tableName": "analytics_kpis",
+  "fields": [
+    { "name": "category", "type": "VARCHAR(100)" },
+    { "name": "priority", "type": "VARCHAR(20)" },
+    { "name": "avg_mttr_hours", "type": "DECIMAL(10,2)" },
+    { "name": "total_incidents", "type": "INT" },
+    { "name": "sla_breach_count", "type": "INT" },
+    { "name": "computed_at", "type": "TIMESTAMP" }
+  ]
+}
