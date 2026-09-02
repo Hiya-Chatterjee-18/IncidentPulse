@@ -1,0 +1,115 @@
+version: '3.8'
+
+services:
+  # =========================================================
+  # 1. FRONTEND LAYER (React 18 + Vite SPA)
+  # =========================================================
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    container_name: incident-analytics-frontend
+    ports:
+      - "3000:80"
+    depends_on:
+      - backend
+    restart: always
+
+  # =========================================================
+  # 2. APPLICATION LAYER (Java 21 / Spring Boot 3 Microservice)
+  # =========================================================
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    container_name: incident-analytics-backend
+    ports:
+      - "8080:8080"
+    environment:
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://postgres:5432/incident_db
+      - SPRING_DATASOURCE_USERNAME=postgres
+      - SPRING_DATASOURCE_PASSWORD=postgres
+      - SPRING_DATA_MONGODB_URI=mongodb://mongodb:27017/incident_docs_db
+      - SPRING_REDIS_HOST=redis
+      - SPRING_REDIS_PORT=6379
+      - SPRING_KAFKA_BOOTSTRAP_SERVERS=kafka:9092
+      - SPRING_RABBITMQ_HOST=rabbitmq
+    depends_on:
+      - postgres
+      - mongodb
+      - redis
+      - kafka
+      - rabbitmq
+    restart: always
+
+  # =========================================================
+  # 3. OPERATIONAL DATA LAYER (PostgreSQL + MongoDB + Redis)
+  # =========================================================
+  postgres:
+    image: postgres:15-alpine
+    container_name: incident-postgres-db
+    environment:
+      POSTGRES_DB: incident_db
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    restart: always
+
+  mongodb:
+    image: mongo:latest
+    container_name: incident-mongodb-docs
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongo_data:/data/db
+    restart: always
+
+  redis:
+    image: redis:alpine
+    container_name: incident-redis-cache
+    ports:
+      - "6379:6379"
+    restart: always
+
+  # =========================================================
+  # 4. EVENT & MESSAGING LAYER (Apache Kafka + RabbitMQ)
+  # =========================================================
+  zookeeper:
+    image: confluentinc/cp-zookeeper:7.3.0
+    container_name: incident-zookeeper
+    environment:
+      ZOOKEEPER_CLIENT_PORT: 2181
+      ZOOKEEPER_TICK_TIME: 2000
+
+  kafka:
+    image: confluentinc/cp-kafka:7.3.0
+    container_name: incident-kafka-broker
+    ports:
+      - "9092:9092"
+    depends_on:
+      - zookeeper
+    environment:
+      KAFKA_BROKER_ID: 1
+      KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
+      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://kafka:9092,PLAINTEXT_HOST://localhost:29092
+      KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: PLAINTEXT:PLAINTEXT,PLAINTEXT_HOST:PLAINTEXT
+      KAFKA_INTER_BROKER_LISTENER_NAME: PLAINTEXT
+      KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
+
+  rabbitmq:
+    image: rabbitmq:3-management-alpine
+    container_name: incident-rabbitmq-tasks
+    ports:
+      - "5672:5672"   # AMQP protocol
+      - "15672:15672" # Web Management Console UI
+    restart: always
+
+# =========================================================
+# VOLUMES PERSISTENCE
+# =========================================================
+volumes:
+  postgres_data:
+  mongo_data:
