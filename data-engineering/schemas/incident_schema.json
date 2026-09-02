@@ -1,0 +1,13 @@
+{
+  "tableName": "incidents",
+  "fields": [
+    { "name": "id", "type": "VARCHAR(64)", "primaryKey": true },
+    { "name": "title", "type": "VARCHAR(255)" },
+    { "name": "category", "type": "VARCHAR(100)" },
+    { "name": "priority", "type": "VARCHAR(20)" },
+    { "name": "status", "type": "VARCHAR(20)" },
+    { "name": "reporter_id", "type": "VARCHAR(64)" },
+    { "name": "assignee_id", "type": "VARCHAR(64)" },
+    { "name": "created_at", "type": "TIMESTAMP" }
+  ]
+}
