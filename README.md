@@ -18,7 +18,7 @@
 
 ## 📌 Overview
 
-The **Smart Incident Management & Analytics Platform** manages the complete incident lifecycle while transforming operational incident events into analytics-ready data.
+The **IncidentPulse ** is a Smart Incident Management & Analytics Platform that manages the complete incident lifecycle while transforming operational incident events into analytics-ready data.
 
 The system combines a transactional backend with an event-driven data engineering pipeline to support:
 
